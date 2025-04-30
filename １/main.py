@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 import sys
 import random
+from PIL import Image, ImageTk
 
 PAPER_BG = "#fffaf0"  
 NOTE_BG = "#fffbf2"   
@@ -159,6 +160,8 @@ root.title("日記アプリ")
 root.attributes('-fullscreen', True)
 root.configure(bg=PAPER_BG)
 
+
+
 root.bind("<Escape>", lambda event: root.destroy())
 
 main_frame = tk.Frame(root, bg=PAPER_BG)
@@ -170,27 +173,37 @@ left_frame.grid(row=0, column=0, sticky="n", padx=40)
 right_frame = tk.Frame(main_frame, bg=PAPER_BG)
 right_frame.grid(row=0, column=1, sticky="n", padx=40, pady=20)
 
-tk.Label(left_frame, text="日付を選択", font=(FONT_JP, 18), bg=PAPER_BG).pack(pady=(15, 8))
+logo_path = "１/img/logo.png"
+
+logo_image = Image.open(logo_path)
+logo_image = logo_image.resize((100, 100)) 
+
+logo_photo = ImageTk.PhotoImage(logo_image)
+
+logo_label = tk.Label(left_frame, image=logo_photo, bg=PAPER_BG)
+logo_label.photo = logo_photo  
+
+
 cal = Calendar(left_frame, selectmode='day', date_pattern='yyyy_mm_dd', font=(FONT_JP, 14), background="lightblue", foreground="black", selectbackground="lightgreen")
 cal.bind("<<CalendarSelected>>", load_data_for_date)
-cal.pack(pady=10, fill="x")  
-
-tk.Label(left_frame, text="天気", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(25, 8))
+cal.grid(row=0, column=1, pady=10, padx=10, sticky="ew") 
+tk.Label(left_frame, text="天気", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=2, column=1, pady=(25, 8))
 weather_var = tk.StringVar()
 weather_combo = ttk.Combobox(left_frame, textvariable=weather_var, values=weather_options, state="readonly", width=25, font=(FONT_JP, 14))
-weather_combo.pack(pady=5, ipady=4, fill="x")
+weather_combo.grid(row=3, column=1, pady=5)
 
-tk.Label(left_frame, text="主な行動", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(25, 8))
+tk.Label(left_frame, text="主な行動", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=4, column=1, pady=(25, 8))
 activity_var = tk.StringVar()
 activity_combo = ttk.Combobox(left_frame, textvariable=activity_var, values=activity_options, state="readonly", width=25, font=(FONT_JP, 14))
-activity_combo.pack(pady=5, ipady=4, fill="x")
+activity_combo.grid(row=5, column=1, pady=5)
 
-tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(25, 8))
+tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=6, column=1, pady=(25, 8))
 satisfaction_scale = tk.Scale(left_frame, from_=0, to=100, orient=tk.HORIZONTAL, length=300, sliderlength=20)
 satisfaction_scale.set(50)
-satisfaction_scale.pack(pady=5, fill="x")
+satisfaction_scale.grid(row=7, column=1, pady=5)
 
-# Add the "Today's Date" label here
+logo_label.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
+
 today_date = datetime.today().strftime("%Y-%m-%d")
 date_label = tk.Label(right_frame, text=f"今日の日付: {today_date}", font=(FONT_JP, 16), bg=PAPER_BG)
 date_label.pack(pady=(10, 5))
@@ -198,7 +211,6 @@ date_label.pack(pady=(10, 5))
 omikuji_button = tk.Button(right_frame, text="今日のおみくじ", font=(FONT_JP, 14), bg="#ffff99", command=draw_omikuji)
 omikuji_button.pack(pady=10)
 
-# おみくじの結果を表示するラベル
 omikuji_label = tk.Label(right_frame, text="おみくじ: ", font=(FONT_JP, 14), bg=PAPER_BG)
 omikuji_label.pack(pady=5)
 
