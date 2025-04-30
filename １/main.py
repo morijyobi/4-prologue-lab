@@ -80,7 +80,7 @@ def save_data():
     btn_frame = tk.Frame(confirm_window, bg=PAPER_BG)
     btn_frame.pack(pady=10)
 
-    tk.Button(btn_frame, text="編集する", font=(FONT_JP, 12), width=10, bg="#87cefa",
+    tk.Button(btn_frame, text="戻る", font=(FONT_JP, 12), width=10, bg="#87cefa",
               command=lambda: [restore_inputs(), confirm_window.destroy()]).pack(side="left", padx=10)
 
     tk.Button(btn_frame, text="保存する", font=(FONT_JP, 12), width=10, bg="#90ee90",
