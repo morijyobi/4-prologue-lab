@@ -18,6 +18,7 @@ if not os.path.exists(DATA_FOLDER):
 weather_options = ["晴れ", "雨", "曇り", "雪"]
 activity_options = ["出社", "テレワーク", "外回り", "出張", "休日"]
 
+
 def save_data():
     date = cal.get_date()
     weather = weather_var.get()
@@ -170,7 +171,8 @@ left_frame.grid(row=0, column=0, sticky="n", padx=40)
 right_frame = tk.Frame(main_frame, bg=PAPER_BG)
 right_frame.grid(row=0, column=1, sticky="n", padx=40, pady=20)
 
-tk.Label(left_frame, text="日付を選択", font=(FONT_JP, 18), bg=PAPER_BG).pack(pady=(15, 8))
+calender_label = tk.Label(left_frame, text="日付を選択", font=(FONT_JP, 18), bg=PAPER_BG)
+calender_label.pack(pady=(15, 8))
 cal = Calendar(left_frame, selectmode='day', date_pattern='yyyy_mm_dd', font=(FONT_JP, 14), background="lightblue", foreground="black", selectbackground="lightgreen")
 cal.bind("<<CalendarSelected>>", load_data_for_date)
 cal.pack(pady=10, fill="x")  
@@ -180,12 +182,14 @@ weather_var = tk.StringVar()
 weather_combo = ttk.Combobox(left_frame, textvariable=weather_var, values=weather_options, state="readonly", width=25, font=(FONT_JP, 14))
 weather_combo.pack(pady=5, ipady=4, fill="x")
 
-tk.Label(left_frame, text="主な行動", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(25, 8))
+acction_label = tk.Label(left_frame, text="主な行動", font=(FONT_JP, 16), bg=PAPER_BG)
+acction_label.pack(pady=(25, 8))
 activity_var = tk.StringVar()
 activity_combo = ttk.Combobox(left_frame, textvariable=activity_var, values=activity_options, state="readonly", width=25, font=(FONT_JP, 14))
 activity_combo.pack(pady=5, ipady=4, fill="x")
 
-tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(25, 8))
+fullness_label = tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 16), bg=PAPER_BG)
+fullness_label.pack(pady=(25, 8))
 satisfaction_scale = tk.Scale(left_frame, from_=0, to=100, orient=tk.HORIZONTAL, length=300, sliderlength=20)
 satisfaction_scale.set(50)
 satisfaction_scale.pack(pady=5, fill="x")
@@ -201,6 +205,44 @@ omikuji_button.pack(pady=10)
 # おみくじの結果を表示するラベル
 omikuji_label = tk.Label(right_frame, text="おみくじ: ", font=(FONT_JP, 14), bg=PAPER_BG)
 omikuji_label.pack(pady=5)
+
+
+feeling_label = tk.Label(right_frame, text="今の気分を選んでください", font=(FONT_JP, 16), bg=PAPER_BG)
+feeling_label.pack(pady=(20, 5))  
+
+feeling_button_frame = tk.Frame(right_frame, bg=PAPER_BG)
+feeling_button_frame.pack(pady=(5, 20))
+
+feelings = {
+    "イライラ": {"bg": "#ff6666", "font": (FONT_JP, 14, "bold")},
+    "悲しい": {"bg": "#87cefa", "font": (FONT_JP, 14, "italic")},
+    "楽しい": {"bg": "#ffff99", "font": ("Hiragino Kaku Gothic Pro", 14)}, 
+}
+
+def change_feeling(feeling):
+    color = feelings[feeling]["bg"]
+    font = feelings[feeling]["font"]
+    
+    root.configure(bg=color)
+    main_frame.configure(bg=color)
+    left_frame.configure(bg=color)
+    right_frame.configure(bg=color)
+    diary_entry.configure(bg=NOTE_BG, font=font) 
+    
+    feeling_label.configure(font=font)
+    omikuji_label.configure(font=font)
+    date_label.configure(font=font)
+    feeling_button_frame.configure(bg=color)
+
+    
+    for widget in right_frame.winfo_children():
+        if isinstance(widget, tk.Label):
+            widget.configure(bg=color, font=font) 
+
+for feeling in feelings:
+    btn = tk.Button(feeling_button_frame, text=feeling, font=(FONT_JP, 14), width=10,
+                    command=lambda f=feeling: change_feeling(f))
+    btn.pack(side="left", padx=10)
 
 tk.Label(right_frame, text="今日の日記", font=(FONT_JP, 16), bg=PAPER_BG).pack(pady=(10, 5))
 
