@@ -79,7 +79,7 @@ def save_data():
 
     confirm_window = tk.Toplevel(root)
     confirm_window.title("保存内容の確認")
-    confirm_window.geometry("500x500")
+    confirm_window.geometry("700x700")
     confirm_window.configure(bg=PAPER_BG)
 
     def restore_inputs():
