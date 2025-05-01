@@ -169,6 +169,20 @@ def change_feeling(feeling):
     for widget in right_frame.winfo_children():
         if isinstance(widget, tk.Label):
             widget.configure(bg=color, font=font)
+            
+def reset_feeling():
+    for widget in [root, main_frame, left_frame, right_frame, feeling_button_frame]:
+        widget.configure(bg=PAPER_BG)
+
+    diary_entry.configure(bg=NOTE_BG, font=(FONT_JP, 16))
+
+    for label in [feeling_label, omikuji_label, date_label]:
+        label.configure(font=(FONT_JP, 16))
+
+    for widget in right_frame.winfo_children():
+        if isinstance(widget, tk.Label):
+            widget.configure(bg=PAPER_BG, font=(FONT_JP, 14))
+
 
 root = tk.Tk()
 root.title("日記アプリ")
@@ -198,31 +212,20 @@ logo_photo = ImageTk.PhotoImage(logo_image)
 logo_label = tk.Label(left_frame, image=logo_photo, bg=PAPER_BG)
 logo_label.photo = logo_photo
 logo_label.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
-# ロゴ（左上に配置）
-# logo_path = "１/img/logo.png"
-# logo_image = Image.open(logo_path).resize((100, 100))
-# logo_photo = ImageTk.PhotoImage(logo_image)
-# logo_label = tk.Label(root, image=logo_photo, bg=PAPER_BG)
-# logo_label.photo = logo_photo
-# logo_label.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
-
-# # main_frameをロゴの下に配置（行番号を1にずらす）
-# main_frame = tk.Frame(root, bg=PAPER_BG)
-# main_frame.grid(row=1, column=0, padx=40, pady=20)
 
 
-tk.Label(left_frame, text="天気", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=2, column=1, pady=(25, 8), sticky="w")
+tk.Label(left_frame, text="天気", font=(FONT_JP, 13), bg=PAPER_BG).grid(row=2, column=1, pady=(10, 8), sticky="w")
 weather_var = tk.StringVar()
 weather_combo = ttk.Combobox(left_frame, textvariable=weather_var, values=weather_options, state="readonly", width=25, font=(FONT_JP, 14))
 weather_combo.grid(row=3, column=1, pady=5)
 
-tk.Label(left_frame, text="主な行動", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=4, column=1, pady=(25, 8), sticky="w")
+tk.Label(left_frame, text="主な行動", font=(FONT_JP, 13), bg=PAPER_BG).grid(row=4, column=1, pady=(10, 8), sticky="w")
 activity_var = tk.StringVar()
 activity_combo = ttk.Combobox(left_frame, textvariable=activity_var, values=activity_options, state="readonly", width=25, font=(FONT_JP, 14))
 activity_combo.grid(row=5, column=1, pady=5)
 
-fullness_label = tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 16), bg=PAPER_BG)
-fullness_label.grid(row=6, column=1, pady=(25, 8), sticky="w")
+fullness_label = tk.Label(left_frame, text="充実度 (0-100)", font=(FONT_JP, 13), bg=PAPER_BG)
+fullness_label.grid(row=6, column=1, pady=(10, 8), sticky="w")
 satisfaction_scale = tk.Scale(left_frame, from_=0, to=100, orient=tk.HORIZONTAL, length=300, sliderlength=20)
 satisfaction_scale.set(50)
 satisfaction_scale.grid(row=7, column=1, pady=5)
@@ -246,6 +249,11 @@ for i, feeling in enumerate(feelings):
     btn = tk.Button(feeling_button_frame, text=feeling, font=(FONT_JP, 14), width=10,
                     command=lambda f=feeling: change_feeling(f))
     btn.grid(row=0, column=i, padx=10)
+    
+reset_btn = tk.Button(feeling_button_frame, text="リセット", font=(FONT_JP, 14), width=10, bg="#dddddd",
+                      command=reset_feeling)
+reset_btn.grid(row=0, column=len(feelings), padx=10)
+
 
 tk.Label(right_frame, text="今日の日記", font=(FONT_JP, 16), bg=PAPER_BG).grid(row=5, column=0, pady=(10, 5))
 diary_entry = tk.Text(right_frame, height=10, width=40, font=(FONT_JP, 16), wrap="word", bg=NOTE_BG, bd=1, relief="solid", padx=15, pady=15)
@@ -253,9 +261,9 @@ diary_entry.grid(row=6, column=0, pady=10)
 
 button_frame = tk.Frame(right_frame, bg=PAPER_BG)
 button_frame.grid(row=7, column=0, pady=10)
-save_btn = tk.Button(button_frame, text="保存する", command=save_data, bg="#90ee90", font=(FONT_JP, 14), width=10, relief="flat", bd=5, activebackground="#80e080")
+save_btn = tk.Button(button_frame, text="保存する", command=save_data, bg="#90ee90", font=(FONT_JP, 13), width=9, relief="flat", bd=5, activebackground="#80e080")
 save_btn.grid(row=0, column=0, padx=10)
-close_btn = tk.Button(button_frame, text="閉じる", command=root.destroy, bg="#f08080", font=(FONT_JP, 14), width=10, relief="flat", bd=5, activebackground="#f08080")
+close_btn = tk.Button(button_frame, text="閉じる", command=root.destroy, bg="#f08080", font=(FONT_JP, 13), width=9, relief="flat", bd=5, activebackground="#f08080")
 close_btn.grid(row=0, column=1, padx=10)
 
 root.mainloop()
