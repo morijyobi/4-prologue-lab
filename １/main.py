@@ -206,7 +206,7 @@ cal = Calendar(left_frame, selectmode='day', date_pattern='yyyy_mm_dd', font=(FO
 cal.grid(row=1, column=1, pady=10)
 cal.bind("<<CalendarSelected>>", load_data_for_date)
 
-logo_path = "１/img/logo.png"
+logo_path = "img/logo.png"
 logo_image = Image.open(logo_path).resize((100, 100))
 logo_photo = ImageTk.PhotoImage(logo_image)
 logo_label = tk.Label(left_frame, image=logo_photo, bg=PAPER_BG)
